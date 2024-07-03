@@ -1,7 +1,6 @@
 import torch
 import torch.nn as nn
 import torch.optim as optim
-import torch.nn.functional as F
 import os
 
 class Linear_QNet(nn.Module):
@@ -9,14 +8,23 @@ class Linear_QNet(nn.Module):
         super().__init__()
         self.linear1 = nn.Linear(input_size, hidden_size)
         self.linear2 = nn.Linear(hidden_size, output_size)
+        self.initialize_weights()
+
+    def initialize_weights(self):
+        for m in self.modules():
+            if isinstance(m, nn.Linear):
+                nn.init.kaiming_uniform_(m.weight, nonlinearity='relu')
+                nn.init.zeros_(m.bias)
 
     def forward(self, x):
-        x = F.relu(self.linear1(x))
+        x = torch.relu(self.linear1(x))
         x = self.linear2(x)
         return x
 
     def save(self, file_name):
-        directory = os.path.dirname(file_name)
-        if not os.path.exists(directory):
-            os.makedirs(directory)
+        # Ensure the directory exists
+        os.makedirs(os.path.dirname(file_name), exist_ok=True)
         torch.save(self.state_dict(), file_name)
+
+    def load(self, file_name):
+        self.load_state_dict(torch.load(file_name))

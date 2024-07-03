@@ -17,7 +17,7 @@ def create_train_folder():
     latest_id = get_latest_train_id()
     new_id = latest_id + 1
     new_folder = os.path.join("trains", f"train_{new_id}")
-    os.makedirs(new_folder)
+    os.makedirs(new_folder, exist_ok=True)
     return new_folder
 
 def save_episode_info(folder, episode, score, record, total_score, mean_score, epsilon, loss):
@@ -68,7 +68,7 @@ def train(max_games=config.MAX_GAMES):
         reward, done, score = game.play_step(final_move)
         state_new = agent.get_state(game)
 
-        loss = agent.train_short_memory(state_old, final_move, reward, state_new, done)
+        agent.train_short_memory(state_old, final_move, reward, state_new, done)
         agent.remember(state_old, final_move, reward, state_new, done)
 
         if done:
@@ -84,17 +84,15 @@ def train(max_games=config.MAX_GAMES):
             mean_score = total_score / agent.n_games
             plot_scores.append(score)
             plot_mean_scores.append(mean_score)
-            plot_losses.append(loss if loss is not None else 0)
+            avg_loss = agent.trainer.get_average_loss()
+            plot_losses.append(avg_loss)
             plot_epsilons.append(agent.epsilon if agent.epsilon is not None else 0)
             
-            save_episode_info(train_folder, agent.n_games, score, record, total_score, mean_score, agent.epsilon, loss)
+            save_episode_info(train_folder, agent.n_games, score, record, total_score, mean_score, agent.epsilon, avg_loss)
             plot(plot_scores, plot_mean_scores, plot_losses, plot_epsilons, train_folder, agent.n_games, config_data)
 
             # Print the values to the terminal
-            if loss is not None:
-                print(f'Game {agent.n_games} Score: {score} Record: {record} Total Score: {total_score} Mean Score: {mean_score:.2f} Epsilon: {agent.epsilon:.2f} Loss: {loss:.2f}')
-            else:
-                print(f'Game {agent.n_games} Score: {score} Record: {record} Total Score: {total_score} Mean Score: {mean_score:.2f} Epsilon: {agent.epsilon:.2f} Loss: 0')
+            print(f'Game {agent.n_games} Score: {score} Record: {record} Total Score: {total_score} Mean Score: {mean_score:.2f} Epsilon: {agent.epsilon:.2f} Avg Loss: {avg_loss:.4f}')
 
     # Save the final model at the end of training
     agent.model.save(os.path.join(train_folder, 'final_model.pth'))
