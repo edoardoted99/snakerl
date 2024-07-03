@@ -7,9 +7,8 @@ def plot(scores, mean_scores, losses, epsilons, folder, game_number, config):
     display.clear_output(wait=True)
     display.display(plt.gcf())
     plt.clf()
-    plt.title(f'LR: {config["LR"]}, Batch Size: {config["BATCH_SIZE"]}, Max Memory: {config["MAX_MEMORY"]},\n'
-              f'Speed: {config["SPEED"]}, Max Games: {config["MAX_GAMES"]},\n'
-              f'Reward Fruit: {config["REWARD_FRUIT"]}, Reward Collision: {config["REWARD_COLLISION"]}, Reward Step: {config["REWARD_STEP"]}')
+    plt.title(f'LR: {config["LR"]}, Batch Size: {config["BATCH_SIZE"]}, Max Memory: {config["MAX_MEMORY"]}', 'Speed: {config["SPEED"]}, Max Games: {config["MAX_GAMES"]},'
+            f'Reward Fruit: {config["REWARD_FRUIT"]}, Reward Collision: {config["REWARD_COLLISION"]}, Reward Step: {config["REWARD_STEP"]}')
     plt.xlabel('Number of Games')
     plt.ylabel('Metrics')
 

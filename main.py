@@ -37,7 +37,7 @@ def save_train_config(folder, config):
     with open(config_file, mode='w') as file:
         json.dump(config, file, indent=4)
 
-def train(max_games=config.MAX_GAMES):
+def train(max_games=config.MAX_GAMES, render=True):
     plot_scores = []
     plot_mean_scores = []
     plot_losses = []
@@ -45,7 +45,7 @@ def train(max_games=config.MAX_GAMES):
     total_score = 0
     record = 0
     agent = Agent()
-    game = SnakeGameAI()
+    game = SnakeGameAI(render=render)
 
     train_folder = create_train_folder()
 
@@ -99,4 +99,4 @@ def train(max_games=config.MAX_GAMES):
 
 if __name__ == '__main__':
     os.makedirs('trains', exist_ok=True)
-    train(max_games=config.MAX_GAMES)
+    train(max_games=config.MAX_GAMES, render=False)  # Set render to False for faster training without UI

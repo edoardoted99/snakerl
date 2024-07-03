@@ -1,11 +1,10 @@
 import torch
 import torch.nn as nn
-import torch.optim as optim
 import os
 
 class Linear_QNet(nn.Module):
     def __init__(self, input_size, hidden_size, output_size):
-        super().__init__()
+        super(Linear_QNet, self).__init__()
         self.linear1 = nn.Linear(input_size, hidden_size)
         self.linear2 = nn.Linear(hidden_size, output_size)
         self.initialize_weights()
@@ -22,9 +21,9 @@ class Linear_QNet(nn.Module):
         return x
 
     def save(self, file_name):
-        # Ensure the directory exists
         os.makedirs(os.path.dirname(file_name), exist_ok=True)
         torch.save(self.state_dict(), file_name)
 
     def load(self, file_name):
         self.load_state_dict(torch.load(file_name))
+        self.eval()  # Set the model to evaluation mode
