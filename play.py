@@ -71,5 +71,5 @@ def play_game(model_path):
             game.reset()
 
 if __name__ == "__main__":
-    model_path = '/home/edo/coding/snakerl/trains/train_31/final_model.pth'  # Replace with the path to your saved model
+    model_path = '/home/edo/coding/snakerl/trains/train_32/final_model.pth'  # Replace with the path to your saved model
     play_game(model_path)

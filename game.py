@@ -34,6 +34,7 @@ class SnakeGameAI:
             self.display = pygame.display.set_mode((self.w, self.h))
             pygame.display.set_caption('Snake')
             self.clock = pygame.time.Clock()
+
         else:
             pygame.font.init()  # Initialize fonts separately
         self.font = pygame.font.SysFont('arial', 25)
